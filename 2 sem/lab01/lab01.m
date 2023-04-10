@@ -10,8 +10,10 @@ function lab01()
 
     fplot(@f, [a, b]);
     hold on;
-    plot(plotXi, plotFi, 'xk');
-    hold on;
+    if debugFlg
+        plot(plotXi, plotFi, 'xk');
+        hold on;
+    end
     scatter(xStar, fStar, 'r', 'filled');
 end
 
@@ -30,7 +32,7 @@ function [x0, f0, plotXi, plotFi] = bitwiseSearch(a, b, eps, debugFlg)
         f1 = f(x1);
 
         if debugFlg
-            fprintf('№ %2d eps=%.7f x*=%.10f f(x*)=%.10f\n', i, eps, x1, f1);
+            fprintf('№ %2d x*=%.10f f(x*)=%.10f\n', i, x1, f1);
         end
 
         plotXi(end+1) = x1;
@@ -63,10 +65,9 @@ function [x0, f0, plotXi, plotFi] = bitwiseSearch(a, b, eps, debugFlg)
     end
 
     if debugFlg
-        fprintf('№ %2d eps=%.7f x*=%.10f f(x*)=%.10f\n', i, eps, x0, f0);
+        fprintf('№ %2d x*=%.10f f(x*)=%.10f\n', i, x0, f0);
     end
 end
-
 
 function y = f(x)
     y = cos(power(x,5) - x + 3 + power(2, 1/3)) + atan((power(x,3) - 5 * sqrt(2)*x - 4) / (sqrt(6)*x + sqrt(3))) + 1.8;
