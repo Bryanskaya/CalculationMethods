@@ -2,29 +2,27 @@ function lab01()
     clc();
 
     debugFlg = 1;
+    delayS = 0.8;
     a = 0;
     b = 1;
-    eps = 0.000001;
-    
-    [xStar, fStar, plotXi, plotFi] = bitwiseSearch(a, b, eps, debugFlg);
+    eps = 0.01;
 
     fplot(@f, [a, b]);
     hold on;
-    if debugFlg
-        plot(plotXi, plotFi, 'xk');
-        hold on;
-    end
+    
+    [xStar, fStar] = bitwiseSearch(a, b, eps, debugFlg, delayS);
+
     scatter(xStar, fStar, 'r', 'filled');
 end
 
-function [x0, f0, plotXi, plotFi] = bitwiseSearch(a, b, eps, debugFlg)
+function [x0, f0] = bitwiseSearch(a, b, eps, debugFlg, delayS)
     i = 0;
     delta = (b - a) / 4;
     x0 = a;
     f0 = f(x0);
 
-    plotXi = [];
-    plotFi = [];
+    plot_x = [];
+    plot_f = [];
 
     while 1
         i = i + 1;
@@ -33,10 +31,17 @@ function [x0, f0, plotXi, plotFi] = bitwiseSearch(a, b, eps, debugFlg)
 
         if debugFlg
             fprintf('№ %2d x*=%.10f f(x*)=%.10f\n', i, x1, f1);
-        end
 
-        plotXi(end+1) = x1;
-        plotFi(end+1) = f1;
+            plot_x(end + 1) = x1;
+            plot_f(end + 1) = f1;
+
+            clc();
+            plot(plot_x, plot_f, 'xk');
+
+            plot(x1, f1, 'xr');
+            hold on;
+            pause(delayS);
+        end
 
         if f0 > f1
             x0 = x1;
@@ -64,8 +69,11 @@ function [x0, f0, plotXi, plotFi] = bitwiseSearch(a, b, eps, debugFlg)
         end
     end
 
+    i = i + 1;
     if debugFlg
         fprintf('№ %2d x*=%.10f f(x*)=%.10f\n', i, x0, f0);
+        fprintf('RESULT: x*=%.10f f(x*)=%.10f\n', x0, f0);
+        plot(plot_x, plot_f, 'xk');
     end
 end
 
