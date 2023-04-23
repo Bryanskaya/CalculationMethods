@@ -2,22 +2,21 @@ function lab02()
     clc();
 
     debugFlg = 1;
+    delayS = 0.8;
     a = 0;
     b = 1;
     eps = 0.000001;
 
-    [xStar, fStar, plot_ax, plot_ay, plot_bx, plot_by] = goldenRatio(a, b, eps, debugFlg);
-
     fplot(@f, [a, b]);
     hold on;
-    if debugFlg
-        plot(plot_ax, plot_ay, 'xk', plot_bx, plot_by, 'xb');
-        hold on;
-    end
+
+    pause(3);
+    [xStar, fStar] = goldenRatio(a, b, eps, debugFlg, delayS);
+
     scatter(xStar, fStar, 'r', 'filled');
 end
 
-function [xStar, fStar, plot_ax, plot_ay, plot_bx, plot_by] = goldenRatio(a, b, eps, debugFlg)
+function [xStar, fStar] = goldenRatio(a, b, eps, debugFlg, delayS)
     tau = (sqrt(5) - 1) / 2;
     l = b - a;
 
@@ -26,50 +25,51 @@ function [xStar, fStar, plot_ax, plot_ay, plot_bx, plot_by] = goldenRatio(a, b, 
     f1 = f(x1);
     f2 = f(x2);
 
-    plot_ax = [];
-    plot_ay = [];
-    plot_bx = [];
-    plot_by = [];
-
     i = 0;
     while 1
         i = i + 1;
 
         if debugFlg
-            fprintf('№ %2d x*=%.10f f(x*)=%.10f ai=%.5f bi=%.5f\n', i, x1, f1, a, b);
+            fprintf('№ %2d ai=%.10f bi=%.10f\n', i, a, b);
+            line([a b], [f(a) f(b)], 'color', 'b');
+            %plot(a, f(a), 'xm', b, f(b), 'xb');
+            hold on;
+            pause(delayS);
         end
 
         if l > 2 * eps
             if f1 <= f2
                 b = x2;
                 l = b - a;
+
                 x2 = x1;
                 f2 = f1;
+
                 x1 = b - tau * l;
                 f1 = f(x1);
             else
                 a = x1;
                 l = b - a;
+
                 x1 = x2;
                 f1 = f2;
+
                 x2 = a + tau * l;
                 f2 = f(x2);
             end
-
-            plot_ax(end+1) = a;
-            plot_ay(end+1) = f(a);
-            plot_bx(end+1) = b;
-            plot_by(end+1) = f(b);
         else
             xStar = (a + b) / 2;
             fStar= f(xStar);
             break
         end
-
     end
 
+    i = i + 1;
     if debugFlg
-        fprintf('№ %2d x*=%.10f f(x*)=%.10f ai=%.5f bi=%.5f\n', i, xStar, fStar, a, b);
+        fprintf('№ %2d ai=%.10f bi=%.10f\n', i, a, b);
+        fprintf('RESULT: x*=%.10f f(x*)=%.10f\n', xStar, fStar);
+
+        line([a b], [f(a) f(b)], 'color', 'r');
     end
 end
 
