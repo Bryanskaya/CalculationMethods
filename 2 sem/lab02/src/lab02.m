@@ -5,7 +5,7 @@ function lab02()
     delayS = 0.8;
     a = 0;
     b = 1;
-    eps = 0.000001;
+    eps = 1e-6;
 
     fplot(@f, [a, b]);
     hold on;
@@ -74,5 +74,6 @@ function [xStar, fStar] = goldenRatio(a, b, eps, debugFlg, delayS)
 end
 
 function y = f(x)
-    y = cos(power(x,5) - x + 3 + power(2, 1/3)) + atan((power(x,3) - 5 * sqrt(2)*x - 4) / (sqrt(6)*x + sqrt(3))) + 1.8;
+    %y = cos(power(x,5) - x + 3 + power(2, 1/3)) + atan((power(x,3) - 5 * sqrt(2)*x - 4) / (sqrt(6)*x + sqrt(3))) + 1.8;
+    y = (x - 0.50)^4;
 end
